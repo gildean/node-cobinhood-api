@@ -93,16 +93,16 @@ module.exports = function createClient(options) {
 
     return {
         serverTime: (callback) => {
-            doRequest('/v1/system/time', 'time', callback);
+            return doRequest('/v1/system/time', 'time', callback);
         },
         serverInfo: (callback) => {
-            doRequest('/v1/system/info', 'info', callback);
+            return doRequest('/v1/system/info', 'info', callback);
         },
         currencies: (callback) => {
-            doRequest('/v1/market/currencies', 'currencies', callback);
+            return doRequest('/v1/market/currencies', 'currencies', callback);
         },
         tradingPairs: (callback) => {
-            doRequest('/v1/market/trading_pairs', 'trading_pairs', callback);
+            return doRequest('/v1/market/trading_pairs', 'trading_pairs', callback);
         },
         orderBook: (symbol, callback, limit = 50) => {
             let opt = {
@@ -111,7 +111,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };
-            doRequest(opt, 'orderbook', (error, orderbook) => {
+            return doRequest(opt, 'orderbook', (error, orderbook) => {
                 if (error) return callback(error);
                 const result = {
                     sequence: orderbook.sequence,
@@ -122,16 +122,16 @@ module.exports = function createClient(options) {
             });
         },
         stats: (callback) => {
-            doRequest('/v1/market/stats', callback);
+            return doRequest('/v1/market/stats', callback);
         },
         ticker: (symbol, callback) => {
-            doRequest(`/v1/market/tickers/${symbol}`, 'ticker', callback);
+            return doRequest(`/v1/market/tickers/${symbol}`, 'ticker', callback);
         },
         tickers: (callback) => {
-            doRequest('/v1/market/tickers', 'tickers', callback);
+            return doRequest('/v1/market/tickers', 'tickers', callback);
         },
         lastPrice: (symbol, callback) => {
-            doRequest(`/v1/market/tickers/${symbol}`, 'ticker', (error, ticker) => {
+            return doRequest(`/v1/market/tickers/${symbol}`, 'ticker', (error, ticker) => {
                 if (error) return callback(error);
                 return callback(undefined, ticker.last_trade_price);
             });
@@ -143,7 +143,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };  
-            doRequest(opt, 'trades', callback);
+            return doRequest(opt, 'trades', callback);
         },
         candles: (symbol, timeframe, callback, endTime = false, startTime = false) => { // Timeframes: 1m, 5m, 15m, 30m, 1h, 3h, 6h, 12h, 1D, 7D, 14D, 1M
             let opt = {
@@ -154,13 +154,13 @@ module.exports = function createClient(options) {
             };
             if (endTime) opt.qs.end_time = endTime;
             if (startTime) opt.qs.start_time = startTime;   
-            doRequest(opt, 'candles', callback);
+            return doRequest(opt, 'candles', callback);
         },
         orderStatus: (orderId, callback) => {
-            doRequestWithAuth(`/v1/trading/orders/${orderId}`, 'order', callback);
+            return doRequestWithAuth(`/v1/trading/orders/${orderId}`, 'order', callback);
         },
         orderTrades: (orderId, callback) => {
-            doRequestWithAuth(`/v1/trading/orders/${orderId}/trades`, 'trades', callback);
+            return doRequestWithAuth(`/v1/trading/orders/${orderId}/trades`, 'trades', callback);
         },
         openOrders: (symbol, callback, limit = 20) => {
             let opt = {
@@ -170,7 +170,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };      
-            doRequestWithAuth(opt, 'orders', callback);
+            return doRequestWithAuth(opt, 'orders', callback);
         },
         openOrdersAll: (callback, limit = 20) => {
             let opt = {
@@ -179,7 +179,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };              
-            doRequestWithAuth(opt, 'orders', callback);
+            return doRequestWithAuth(opt, 'orders', callback);
         },
         orderCancel: (orderId, callback) => {
             let opt = {
@@ -189,7 +189,7 @@ module.exports = function createClient(options) {
                     nonce: (new Date()).getTime()
                 }
             };
-            doRequestWithAuth(opt, 'orders', (error, result) => {
+            return doRequestWithAuth(opt, 'orders', (error, result) => {
                 if (error) return callback(error);
                 return callback(undefined, result.success);
             });
@@ -206,7 +206,7 @@ module.exports = function createClient(options) {
                     nonce: (new Date()).getTime()
                 }
             };
-            doRequestWithAuth(opt, (error, result) => {
+            return doRequestWithAuth(opt, (error, result) => {
                 if (error) return callback(error);
                 return callback(undefined, result.success);
             });
@@ -219,7 +219,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };
-            doRequestWithAuth(opt, 'orders', callback);
+            return doRequestWithAuth(opt, 'orders', callback);
         },
         orderHistoryAll: (callback, limit = 50) => {
             let opt = {
@@ -228,7 +228,7 @@ module.exports = function createClient(options) {
                     limit: limit
                 }
             };
-            doRequestWithAuth(opt, 'orders', callback);
+            return doRequestWithAuth(opt, 'orders', callback);
         },
         limitBuy: (symbol, price, quantity, callback) => {
             placeOrder(symbol, price, quantity, 'bid', 'limit', callback);
