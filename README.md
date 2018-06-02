@@ -68,9 +68,15 @@ npm install node-cobinhood-api
 
 #### Main setup
 ```js
-const cobinhood = require('node-cobinhood-api');
-
-cobinhood.options({
+const createClient = require('node-cobinhood-api');
+const cobinhood = createClient({
+    'apiKey': '<api key>',
+    'verbose': true
+});
+```
+or
+```js
+const cobinhood = require('node-cobinhood-api')({
     'apiKey': '<api key>',
     'verbose': true
 });
