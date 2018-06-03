@@ -115,8 +115,8 @@ module.exports = function createClient(options) {
                 if (error) return callback(error);
                 const result = {
                     sequence: orderbook.sequence,
-                    bids: mapOrders(orderbook.asks),
-                    asks: mapOrders(orderbook.bids)
+                    bids: mapOrders(orderbook.bids),
+                    asks: mapOrders(orderbook.asks)
                 };
                 return callback(undefined, result);
             });
